@@ -93,7 +93,7 @@ Stores details for each brand.
 
 ### 3. User API:
 - **GET /users/{userId}/earnings**: Get total approved earnings and advance payout balance.
-- **PUT /users/{userId}/adjustBalance**: Adjust the user’s balance when a payout is canceled or refunded.
+- **PUT /users/{userId}/adjustBalance**: Adjust the user’s balance when a payout is canceled or refunded. (I didn't see any use case here - but adding it just for admin functionality)
 
 ## 5. Component Interaction
 
@@ -107,7 +107,7 @@ Stores details for each brand.
 2. **Admin Reconciliation**:
    - Admin updates the sale status to approved or declined.
    - If the status is approved, the system calculates the remaining balance (after deducting the 10% advance payout).
-   - If the status is declined, the system subtracts the advance payout from the final approved balance.
+   - If the status is declined, the system subtracts the advance payout from the final approved balance.(Considering it as 0)
 
 3. **Final Payout**:
    - Once the reconciliation is complete, the system computes the final approved balance for the user.
@@ -116,7 +116,7 @@ Stores details for each brand.
 ### Example Sequence for Payout Reversal:
 
 1. **Payout Cancellation**:
-   - If a payout is canceled or rejected by the payout partner, the system reverses the payout by adding the amount back to the user's `totalEarnings` balance.
+   - If a payout is canceled or rejected by the payout partner, the system reverses the payout by subtracting the amount back to the user's `totalAdvancePaid` balance.
 
 2. **User Withdrawal**:
    - After cancellation, the user can re-request the payout.

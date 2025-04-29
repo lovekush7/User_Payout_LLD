@@ -20,12 +20,15 @@ export class SalesService {
     // transaction ends
   }
 
+  getSale(saleId: string): Sale {
+    return this.salesDB.get(saleId)!;
+  }
+
   // only admin can reconcile a sale
   reconcileSale(saleId: string, newStatus: SaleStatus) {
     // transaction starts
     try {
-        const sale = this.salesDB.get(saleId);
-        if (!sale) throw new Error("Sale not found");
+        const sale = this.getSale(saleId);
         if (sale.status === newStatus) return;
         sale.status = newStatus;
         if (newStatus === SaleStatus.APPROVED) {
@@ -41,6 +44,10 @@ export class SalesService {
         throw error;
     }
     // transaction ends
+  }
+
+  getSales(userId: string): Sale[] {
+    return [...this.salesDB.values()].filter(sale => sale.userId === userId);
   }
 
   getPendingSalesForUser(userId: string): Sale[] { // get all sales for a user that are pending and have not been paid out

@@ -4,6 +4,7 @@ import { Sale } from "../Models/Sale";
 import { SaleStatus } from "../Models/Enums";
 import { PayoutStatus } from "../Models/Enums";
 import { PayoutPartnerService } from "./PayoutPartnerServices";
+
 export class PayoutService {
   constructor(
     private payoutDB: Map<string, Payout>,
@@ -56,5 +57,9 @@ export class PayoutService {
     this.salesDB.set(saleId, { ...this.salesDB.get(saleId)!, advancePayoutGiven: false });
     this.usersDB.set(payout.userId, user);
     this.payoutDB.set(payoutId, { ...payout, status: PayoutStatus.REJECTED || PayoutStatus.CANCELLED || PayoutStatus.FAILED });
+  }
+
+  getPayouts(userId: string): Payout[] {
+    return [...this.payoutDB.values()].filter(payout => payout.userId === userId);
   }
 }
